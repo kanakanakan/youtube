@@ -9,115 +9,9 @@
         }
 
         .inner {
-            width: 60%;
-            display: block;
+            width: 80%;
             margin-left: auto;
             margin-right: auto;
-        }
-
-        #player {
-            width: 85%;
-            height: 500px;
-            display: block;
-            margin-left: auto;
-            margin-right: auto;
-        }
-
-        .slot {
-            text-align: center;
-        }
-
-
-        .btn {
-            display: inline-block;
-            padding: 10px 16px;
-            background-color: #007bff;
-            color: white;
-            border-radius: 8px;
-            cursor: pointer;
-            transition: background-color 0.2s, transform 0.1s;
-            font-weight: bold;
-            text-align: center;
-            user-select: none;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
-        }
-
-        .btn:hover {
-            background-color: #0056b3;
-        }
-
-        .btn:active {
-            transform: scale(0.95);
-        }
-
-        .movieid-btn,
-        .speedBtn {
-            list-style-type: none;
-        }
-
-        nav {
-            margin-top: 20px;
-        }
-
-        .control-group {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 10px;
-            margin-bottom: 20px;
-            justify-content: center;
-            align-items: center;
-        }
-
-        .select-group,
-        .speed-group {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            margin-top: 10px;
-            justify-content: center;
-        }
-
-        #MovieId {
-            padding: 6px;
-            border-radius: 5px;
-            border: 1px solid #ccc;
-        }
-
-        #ytSearch {
-            padding: 6px;
-            border-radius: 5px;
-            border: 1px solid #ccc;
-        }
-
-        #searchBtn {
-            padding: 8px 12px;
-            background-color: #28a745;
-            color: white;
-            border: none;
-            border-radius: 6px;
-            cursor: pointer;
-            font-weight: bold;
-        }
-
-        #searchBtn:hover {
-            background-color: #218838;
-        }
-
-        #slotStart,
-        #slotStop {
-            margin-right: 10px;
-            padding: 8px 14px;
-            border: none;
-            border-radius: 6px;
-            background-color: #ff9800;
-            color: white;
-            font-weight: bold;
-            cursor: pointer;
-        }
-
-        #slotStart:hover,
-        #slotStop:hover {
-            background-color: #e68900;
         }
     </style>
 </head>
@@ -127,9 +21,10 @@
         <!-- 1. The <iframe> (and video player) will replace this <div> tag. -->
         <!-- 1. ここの<div>タグがYoutubeの<iframe>に置き換わる。 -->
         <div id="player"></div>
+        <!-- 動画が表示されている<div>の下に追加 -->
+        <select class="searchlist"></select>
 
-
-        <div class="slot">
+        <div>
             <h3>スロットで動画を選ぼう！</h3>
             <div id="slotDisplay" style="font-size: 24px; font-weight: bold; margin: 10px 0;">🎰 スロット未開始 🎰</div>
             <button id="slotStart">スタート</button>
@@ -138,55 +33,47 @@
         </div>
 
         <nav>
-            <form class="control-group">
-                <input type="search" id="ytSearch" value="" />
+            <form>
+                <input type="search" id="ytSearch" value="HIKAKIN" />
                 <button id="searchBtn">検索</button>
             </form>
 
             <ul>
-                <div class="control-group">
-                    <li class="btn" id="doplay">再生</li>
-                    <li class="btn" id="dostop">停止</li>
-                    <li class="btn" id="dopause">一時停止</li>
-                    <li class="btn" id="mute">ミュート</li>
-                    <li class="btn" id="do10sNext">10秒先へ</li>
-                    <li class="btn" id="do10sPrev">10秒戻る</li>
-                </div>
-                <div class="select-group">
-                    <li class="movieid-btn">
-                        <select id="MovieId" class="ytMovie" name="ytMovie">
-                            <option selected>選択してください。</option>
-                            <option value="bjN-3EyXNyE">TRiDENT『Alive』MV</option>
-                            <option value="We__CnrYa9U">TRiDENT『DISTINATION』</option>
-                            <option value="I6ld4ecEp7s">TRiDENT『IMAGINATION』MV</option>
-                            <option value="azQVVhMUz58">TRiDENT『Continue』MV【exガールズロックバンド革命】</option>
-                            </option>
-                        </select>
-                    </li>
-                </div>
-                <div class="speed-group">
-                    <li class="speedBtn">
-                        <form id="doSpeed">
-                            <input type="radio" id="mslow" name="speed" value="0.25" />
-                            <label for="mslow">0.25</label>
-                            <input type="radio" id="slow" name="speed" value="0.5" />
-                            <label for="slow">0.5</label>
-                            <input type="radio" id="normal" name="speed" value="1.0" checked />
-                            <label for="normal">1</label>
-                            <input type="radio" id="hspeed" name="speed" value="1.5" />
-                            <label for="hspeed">1.5</label>
-                            <input type="radio" id="mhspeed" name="speed" value="2" />
-                            <label for="mhspeed">2</label>
-                        </form>
-                    </li>
-                </div>
+                <li id="doplay">再生</li>
+                <li id="dostop">停止</li>
+                <li id="dopause">一時停止</li>
+                <li id="mute">ミュート</li>
+                <li id="do10sNext">10秒先へ</li>
+                <li id="do10sPrev">10秒戻る</li>
+                <li>
+                    <select id="MovieId" class="ytMovie" name="ytMovie">
+                        <option selected>選択してください。</option>
+                        <option value="bjN-3EyXNyE">TRiDENT『Alive』MV</option>
+                        <option value="We__CnrYa9U">TRiDENT『DISTINATION』</option>
+                        <option value="I6ld4ecEp7s">TRiDENT『IMAGINATION』MV</option>
+                        <option value="azQVVhMUz58">TRiDENT『Continue』MV【exガールズロックバンド革命】</option>
+                        </option>
+                    </select>
+                </li>
+                <li>
+                    <form id="doSpeed">
+                        <input type="radio" id="mslow" name="speed" value="0.25" />
+                        <label for="mslow">0.25</label>
+                        <input type="radio" id="slow" name="speed" value="0.5" />
+                        <label for="slow">0.5</label>
+                        <input type="radio" id="normal" name="speed" value="1.0" checked />
+                        <label for="normal">1</label>
+                        <input type="radio" id="hspeed" name="speed" value="1.5" />
+                        <label for="hspeed">1.5</label>
+                        <input type="radio" id="mhspeed" name="speed" value="2" />
+                        <label for="mhspeed">2</label>
+                    </form>
+                </li>
             </ul>
         </nav>
-        <div class="control-group">
-            <label>ボリューム<input type=" range" min="0" max="100" name="volume" id="volume" value="50" />
-                <span id="volumeNum"></span>
-            </label>
-        </div>
+        <label>ボリューム<input type="range" min="0" max="100" name="volume" id="volume" value="50" />
+            <span id="volumeNum"></span>
+        </label>
     </div>
 
     <script>
@@ -440,12 +327,12 @@
 
         // 動画リスト
         const videoOptions = [
-            { id: "q0T8T_Acz70", title: "トップ製菓CM" },
-            { id: "zBqekh3glxA", title: "ACジャパン CM あいさつの魔法 30秒版" },
-            { id: "jSTjJp1gjZ4", title: "【CM】ニッスイ 活ちくわ" },
-            { id: "AeQpClPY8z4", title: "アフラック　新やさしいEVER　「持病の歌」" },
-            { id: "0mKEeqzqJtc", title: "東進ハイスクール「いつやるか？今でしょ！」CM" },
-            { id: "qfFywo6LrmU", title: "ドラえもんほっともっとCM集" },
+            { id: "rcghp1hPEKo", title: "【綾鷹】 おにぎり食堂 綾鷹屋 上白石 萌歌 TVCM「鮭おにぎり」篇 15秒 AYATAKA TVCF" },
+            { id: "Yqoa0s_yw7Q", title: "阿部寛出演／コカ・コーラシステム「やかんの濃麦茶 from 爽健美茶」新CM「初めての濃いに夢中」篇 15秒" },
+            { id: "jXTX4oo96M8", title: "サントリー緑茶 伊右衛門 特茶 『人生の階段』コウメ太夫" },
+            { id: "XghThSrjknE", title: "お〜いお茶「お〜いオオタニサン！」篇 30秒" },
+            { id: "aZYM6T_6LTY", title: "吉沢亮出演／6年ぶり大刷新「キリン 生茶」新CM「新・やさしさ（4月）」篇" },
+            { id: "YK3p8Qp40f8", title: "十六茶 CM 「16チャージ！交差点」編 15秒 新垣結衣" },
         ];
 
         let slotTimer = null;
