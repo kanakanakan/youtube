@@ -3,123 +3,7 @@
 
 <head>
     <meta charset="UTF-8">
-    <style>
-        body {
-            background-color: #e8fffd;
-        }
-
-        .inner {
-            width: 60%;
-            display: block;
-            margin-left: auto;
-            margin-right: auto;
-        }
-
-        #player {
-            width: 85%;
-            height: 500px;
-            display: block;
-            margin-left: auto;
-            margin-right: auto;
-        }
-
-        .slot {
-            text-align: center;
-        }
-
-
-        .btn {
-            display: inline-block;
-            padding: 10px 16px;
-            background-color: #007bff;
-            color: white;
-            border-radius: 8px;
-            cursor: pointer;
-            transition: background-color 0.2s, transform 0.1s;
-            font-weight: bold;
-            text-align: center;
-            user-select: none;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
-        }
-
-        .btn:hover {
-            background-color: #0056b3;
-        }
-
-        .btn:active {
-            transform: scale(0.95);
-        }
-
-        .movieid-btn,
-        .speedBtn {
-            list-style-type: none;
-        }
-
-        nav {
-            margin-top: 20px;
-        }
-
-        .control-group {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 10px;
-            margin-bottom: 20px;
-            justify-content: center;
-            align-items: center;
-        }
-
-        .select-group,
-        .speed-group {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            margin-top: 10px;
-            justify-content: center;
-        }
-
-        #MovieId {
-            padding: 6px;
-            border-radius: 5px;
-            border: 1px solid #ccc;
-        }
-
-        #ytSearch {
-            padding: 6px;
-            border-radius: 5px;
-            border: 1px solid #ccc;
-        }
-
-        #searchBtn {
-            padding: 8px 12px;
-            background-color: #28a745;
-            color: white;
-            border: none;
-            border-radius: 6px;
-            cursor: pointer;
-            font-weight: bold;
-        }
-
-        #searchBtn:hover {
-            background-color: #218838;
-        }
-
-        #slotStart,
-        #slotStop {
-            margin-right: 10px;
-            padding: 8px 14px;
-            border: none;
-            border-radius: 6px;
-            background-color: #ff9800;
-            color: white;
-            font-weight: bold;
-            cursor: pointer;
-        }
-
-        #slotStart:hover,
-        #slotStop:hover {
-            background-color: #e68900;
-        }
-    </style>
+    <link rel="stylesheet" href="./style.css">
 </head>
 
 <body>
@@ -130,11 +14,40 @@
 
 
         <div class="slot">
-            <h3>スロットで動画を選ぼう！</h3>
-            <div id="slotDisplay" style="font-size: 24px; font-weight: bold; margin: 10px 0;">🎰 スロット未開始 🎰</div>
+            <h3>シャッフルマシンで動画を選ぼう！</h3>
+            <div id="slotDisplay" style="font-size: 24px; font-weight: bold; margin: 10px 0;">🎲 シャッフル未開始 🎲</div>
             <button id="slotStart">スタート</button>
             <button id="slotStop">ストップ</button>
             <!-- スロット結果を再生するボタン -->
+        </div>
+
+        <div class="slot">
+            <h3>スロットで動画を選ぼう！</h3>
+            <div class="reels">
+                <div class="reel" id="reel1">
+                    <img src="./image/acjapan.jpg" alt="reel1" class="slot-image">
+                    <button class="stop-btn" data-reel="1">STOP</button>
+                </div>
+                <div class="reel" id="reel2">
+                    <img src="./image/acjapan.jpg" alt="reel2" class="slot-image">
+                    <button class="stop-btn" data-reel="2">STOP</button>
+                </div>
+                <div class="reel" id="reel3">
+                    <img src="./image/acjapan.jpg" alt="reel3" class="slot-image">
+                    <button class="stop-btn" data-reel="3">STOP</button>
+                </div>
+            </div>
+            <button id="startBtn">スタート</button>
+            <div id="resultMessage"></div>
+            <!-- <div id="slotDisplay" style="font-size: 24px; font-weight: bold; margin: 10px 0;">🎰 スロット未開始 🎰</div>
+            <button id="slotStart">スタート</button>
+            <button id="slotStop">ストップ</button>
+            スロット結果を再生するボタン -->
+            <!-- <div class="images">
+                <img style="height: 200px;" src="./image/acjapan.jpg" alt="">
+                <img style="height: 200px;" src="./image/tikuwa.jpg" alt="">
+                <img style="height: 200px;" src="./image/topseika.jpeg" alt="">
+            </div> -->
         </div>
 
         <nav>
