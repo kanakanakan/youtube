@@ -8,7 +8,6 @@
 
 <body>
     <div class="wrapper">
-        <!-- 左側：player + ボタン群 -->
         <section class="video-control">
             <div class="inner">
                 <div id="player"></div>
@@ -16,12 +15,36 @@
                 <nav>
                     <ul>
                         <div class="control-group">
-                            <li class="btn" id="doplay">再生</li>
+                            <!-- <li class="btn" id="doplay">再生</li>
                             <li class="btn" id="dostop">停止</li>
                             <li class="btn" id="dopause">一時停止</li>
                             <li class="btn" id="mute">ミュート</li>
                             <li class="btn" id="do10sNext">10秒先へ</li>
-                            <li class="btn" id="do10sPrev">10秒戻る</li>
+                            <li class="btn" id="do10sPrev">10秒戻る</li> -->
+                            <li class="btn" id="doplay">
+                                <span class="key">Space</span>
+                                <span class="label">再生</span>
+                            </li>
+                            <li class="btn" id="dostop">
+                                <span class="key">S</span>
+                                <span class="label">停止</span>
+                            </li>
+                            <li class="btn" id="dopause">
+                                <span class="key">Space</span>
+                                <span class="label">一時停止</span>
+                            </li>
+                            <li class="btn" id="mute">
+                                <span class="key">M</span>
+                                <span class="label">ミュート</span>
+                            </li>
+                            <li class="btn" id="do10sNext">
+                                <span class="key">→</span>
+                                <span class="label">10秒先へ</span>
+                            </li>
+                            <li class="btn" id="do10sPrev">
+                                <span class="key">←</span>
+                                <span class="label">10秒戻る</span>
+                            </li>
                         </div>
                         <div class="select-group">
                             <li class="movieid-btn">
@@ -70,7 +93,6 @@
             </div>
         </section>
 
-        <!-- 右側：シャッフルとスロット -->
         <section class="shuffle-section">
             <div class="shuffle">
                 <h3>シャッフルマシンで動画を選ぼう！</h3>
@@ -207,12 +229,17 @@
 
             //ミュートイベント
             let onMuteBtn = document.querySelector('#mute');
+            const labelSpan = onMuteBtn.querySelector('.label');
+
             onMuteBtn.addEventListener('click', function () {
-                onMute();
-                if (onMuteBtn.innerText === 'ミュート') {
-                    onMuteBtn.innerText = 'ミュート解除';
+                const isCurrentlyMuted = player.isMuted();
+
+                if (isCurrentlyMuted) {
+                    player.unMute();
+                    labelSpan.textContent = 'ミュート解除';  // 今はミュート解除状態だから「ミュート解除」と表示
                 } else {
-                    onMuteBtn.innerText = 'ミュート';
+                    player.mute();
+                    labelSpan.textContent = 'ミュート';      // 今はミュート状態だから「ミュート」と表示
                 }
             });
 
@@ -345,8 +372,42 @@
         const shuffleStopBtn = document.getElementById('shuffleStop');
         // const playSelected = document.getElementById('playSelected');
 
+        // function onPlayerReady(event) {
+        //     event.target.playVideo(); // プレイヤー準備完了後に再生
+        // }
         function onPlayerReady(event) {
-            event.target.playVideo(); // プレイヤー準備完了後に再生
+            event.target.playVideo();
+            let currentVol = 5;
+            event.target.setVolume(currentVol);
+            document.querySelector('#volume').value = currentVol;
+            document.querySelector('#volumeNum').textContent = currentVol;
+
+            // let isMuted = false;
+
+            // onMuteBtn.addEventListener('click', function () {
+            //     if (isMuted) {
+            //         player.unMute();
+            //         onMuteBtn.innerText = 'ミュート';
+            //         isMuted = false;
+            //     } else {
+            //         player.mute();
+            //         onMuteBtn.innerText = 'ミュート解除';
+            //         isMuted = true;
+            //     }
+            // });
+            const muteBtn = document.querySelector('#mute');
+            const keySpan = muteBtn.querySelector('.key');    // M
+            const labelSpan = muteBtn.querySelector('.label'); // ミュート / ミュート解除
+
+            muteBtn.addEventListener('click', () => {
+                if (player.isMuted()) {
+                    player.unMute();
+                    labelSpan.textContent = `${'ミュート'}`;
+                } else {
+                    player.mute();
+                    labelSpan.textContent = 'ミュート解除';
+                }
+            });
         }
 
         function onPlayerStateChange(event) {
@@ -386,25 +447,10 @@
                 });
             };
 
-
-            //         //動画切り替えイベント
-            // let movieid = document.querySelector('#MovieId');
-            // movieid.addEventListener('change', function () {
-            //     youtubeId = movieid.value;
-            //     //プレイヤー削除
-            //     player.destroy();
-            //     onYouTubeIframeAPIReady();
-            // });
-
-            // // プレイヤー切り替え
-            // youtubeId = selected.id;
-            // player.destroy();
-            // // onYouTubeIframeAPIReady();
         })
             ;
 
         function ytSearch(val = '', showHeading = true) {
-            // const key = 'AIzaSyA87AdqacGnMyKvhYhobeoeFjLdBOJfd58';
             const key = 'AIzaSyAlacGXiu5caP5p19dY_9NC9JB4m2ulwTI';
 
             const channelId = 'UCcGSTI830YkwaocFV31Q7MA';
@@ -512,334 +558,67 @@
                 });
         });
 
+        function onMute() {
+            if (player.isMuted()) {
+                player.unMute();
+            } else {
+                player.mute();
+            }
+        }
 
+        function onePrev() {
+            const currentTime = player.getCurrentTime();
+            player.seekTo(Math.max(currentTime - 10, 0), true);
+        }
 
-        // // 動画リスト
-        // const videoOptions = [
-        //     { id: "rcghp1hPEKo", title: "【綾鷹】 おにぎり食堂 綾鷹屋 上白石 萌歌 TVCM「鮭おにぎり」篇 15秒 AYATAKA TVCF" },
-        //     { id: "Yqoa0s_yw7Q", title: "阿部寛出演／コカ・コーラシステム「やかんの濃麦茶 from 爽健美茶」新CM「初めての濃いに夢中」篇 15秒" },
-        //     { id: "jXTX4oo96M8", title: "サントリー緑茶 伊右衛門 特茶 『人生の階段』コウメ太夫" },
-        //     { id: "XghThSrjknE", title: "お〜いお茶「お〜いオオタニサン！」篇 30秒" },
-        //     { id: "aZYM6T_6LTY", title: "吉沢亮出演／6年ぶり大刷新「キリン 生茶」新CM「新・やさしさ（4月）」篇" },
-        //     { id: "YK3p8Qp40f8", title: "十六茶 CM 「16チャージ！交差点」編 15秒 新垣結衣" },
-        // ];
+        function oneNext() {
+            const currentTime = player.getCurrentTime();
+            player.seekTo(currentTime + 10, true);
+        }
 
-        // let slotTimer = null;
+        document.addEventListener('keydown', function (event) {
+            switch (event.key) {
+                case ' ': // スペースキーで再生/一時停止
+                    event.preventDefault(); // ページのスクロール防止
+                    if (player.getPlayerState() === YT.PlayerState.PLAYING) {
+                        player.pauseVideo();
+                    } else {
+                        player.playVideo();
+                    }
+                    break;
+                case 's': // sキーで停止
+                    stopVideo();
+                    break;
+                case 'm': // mキーでミュート/ミュート解除
+                    onMute();
+                    const labelSpan = document.querySelector('#mute .label');
+                    // labelSpan.textContent = player.isMuted() ? 'ミュート解除' : 'ミュート';
+                    labelSpan.textContent = player.isMuted() ? 'ミュート' : 'ミュート解除';
+                    break;
+                case 'ArrowLeft': // ←キーで10秒戻る
+                    onePrev();
+                    break;
+                case 'ArrowRight': // →キーで10秒進む
+                    oneNext();
+                    break;
+                case '1': // 1キーで再生速度0.25倍
+                case '2': // 2キーで0.5倍
+                case '3': // 3キーで通常
+                case '4': // 4キーで1.5倍
+                case '5': // 5キーで2倍
+                    const speeds = {
+                        '1': 0.25,
+                        '2': 0.5,
+                        '3': 1.0,
+                        '4': 1.5,
+                        '5': 2.0,
+                    };
+                    player.setPlaybackRate(speeds[event.key]);
+                    break;
+            }
+        });
 
-        // let currentSlotIndex = 0;
-
-        // const slotDisplay = document.getElementById('slotDisplay');
-        // const slotStartBtn = document.getElementById('slotStart');
-        // const slotStopBtn = document.getElementById('slotStop');
-        // // const playSelected = document.getElementById('playSelected');
-
-        // function onPlayerReady(event) {
-        //     event.target.playVideo(); // プレイヤー準備完了後に再生
-        // }
-
-        // function onPlayerStateChange(event) {
-        //     // 状態変化に応じて何かしたい場合ここに
-        // }
-
-        // // // プレイヤー作成関数
-        // // function createPlayer(videoId) {
-        // //     player = new YT.Player('player', {
-        // //         height: '390',
-        // //         width: '640',
-        // //         videoId: videoId,
-        // //         events: {
-        // //             'onReady': onPlayerReady,
-        // //             'onStateChange': onPlayerStateChange
-        // //         }
-        // //     });
-        // // }
-
-        // // スロットスタート
-        // slotStartBtn.addEventListener('click', function () {
-        //     if (slotTimer) return; // 連打防止
-        //     slotTimer = setInterval(() => {
-        //         currentSlotIndex = Math.floor(Math.random() * videoOptions.length);
-        //         slotDisplay.textContent = videoOptions[currentSlotIndex].title;
-        //     }, 100);
-        // })
-
-        // // スロットストップ
-        // slotStopBtn.addEventListener('click', function () {
-        //     if (!slotTimer) return; // 連打防止
-        //     clearInterval(slotTimer);
-        //     slotTimer = null;
-
-        //     const selected = videoOptions[currentSlotIndex];
-        //     slotDisplay.textContent = `🎉 選ばれたのは「${selected.title}」でした！`;
-
-        //     //プレイヤーの動画を切り替える
-        //     if (player && typeof player.loadVideoById === 'function') {
-        //         player.loadVideoById(selected.id);
-        //     } else {
-        //         // プレイヤーが存在しない場合は再生成
-        //         player = new YT.Player('player', {
-        //             height: '390',
-        //             width: '640',
-        //             videoId: selected.id,
-        //             events: {
-        //                 'onReady': onPlayerReady
-        //             }
-        //         });
-        //     };
-
-
-        //         //動画切り替えイベント
-        // let movieid = document.querySelector('#MovieId');
-        // movieid.addEventListener('change', function () {
-        //     youtubeId = movieid.value;
-        //     //プレイヤー削除
-        //     player.destroy();
-        //     onYouTubeIframeAPIReady();
-        // });
-
-        // // プレイヤー切り替え
-        // youtubeId = selected.id;
-        // player.destroy();
-        // // onYouTubeIframeAPIReady();
-        // })
-        //     ;
-
-        // // 動画リスト
-        // const videoOptions = [
-        //     { id: "rcghp1hPEKo", title: "【綾鷹】 おにぎり食堂 綾鷹屋 上白石 萌歌 TVCM「鮭おにぎり」篇 15秒 AYATAKA TVCF" },
-        //     { id: "Yqoa0s_yw7Q", title: "阿部寛出演／コカ・コーラシステム「やかんの濃麦茶 from 爽健美茶」新CM「初めての濃いに夢中」篇 15秒" },
-        //     { id: "jXTX4oo96M8", title: "サントリー緑茶 伊右衛門 特茶 『人生の階段』コウメ太夫" },
-        //     { id: "XghThSrjknE", title: "お〜いお茶「お〜いオオタニサン！」篇 30秒" },
-        //     { id: "aZYM6T_6LTY", title: "吉沢亮出演／6年ぶり大刷新「キリン 生茶」新CM「新・やさしさ（4月）」篇" },
-        //     { id: "YK3p8Qp40f8", title: "十六茶 CM 「16チャージ！交差点」編 15秒 新垣結衣" },
-        // ];
-
-        // let slotTimer = null;
-
-        // let currentSlotIndex = 0;
-
-        // const slotDisplay = document.getElementById('slotDisplay');
-        // const slotStartBtn = document.getElementById('slotStart');
-        // const slotStopBtn = document.getElementById('slotStop');
-        // // const playSelected = document.getElementById('playSelected');
-
-        // function onPlayerReady(event) {
-        //     event.target.playVideo(); // プレイヤー準備完了後に再生
-        // }
-
-        // function onPlayerStateChange(event) {
-        //     // 状態変化に応じて何かしたい場合ここに
-        // }
-
-        // // // プレイヤー作成関数
-        // // function createPlayer(videoId) {
-        // //     player = new YT.Player('player', {
-        // //         height: '390',
-        // //         width: '640',
-        // //         videoId: videoId,
-        // //         events: {
-        // //             'onReady': onPlayerReady,
-        // //             'onStateChange': onPlayerStateChange
-        // //         }
-        // //     });
-        // // }
-
-        // // スロットスタート
-        // slotStartBtn.addEventListener('click', function () {
-        //     if (slotTimer) return; // 連打防止
-        //     slotTimer = setInterval(() => {
-        //         currentSlotIndex = Math.floor(Math.random() * videoOptions.length);
-        //         slotDisplay.textContent = videoOptions[currentSlotIndex].title;
-        //     }, 100);
-        // })
-
-        // // スロットストップ
-        // slotStopBtn.addEventListener('click', function () {
-        //     if (!slotTimer) return; // 連打防止
-        //     clearInterval(slotTimer);
-        //     slotTimer = null;
-
-        //     const selected = videoOptions[currentSlotIndex];
-        //     slotDisplay.textContent = `🎉 選ばれたのは「${selected.title}」でした！`;
-
-        //     //プレイヤーの動画を切り替える
-        //     if (player && typeof player.loadVideoById === 'function') {
-        //         player.loadVideoById(selected.id);
-        //     } else {
-        //         // プレイヤーが存在しない場合は再生成
-        //         player = new YT.Player('player', {
-        //             height: '390',
-        //             width: '640',
-        //             videoId: selected.id,
-        //             events: {
-        //                 'onReady': onPlayerReady
-        //             }
-        //         });
-        //     };
-
-
-        //     //         //動画切り替えイベント
-        //     // let movieid = document.querySelector('#MovieId');
-        //     // movieid.addEventListener('change', function () {
-        //     //     youtubeId = movieid.value;
-        //     //     //プレイヤー削除
-        //     //     player.destroy();
-        //     //     onYouTubeIframeAPIReady();
-        //     // });
-
-        //     // // プレイヤー切り替え
-        //     // youtubeId = selected.id;
-        //     // player.destroy();
-        //     // // onYouTubeIframeAPIReady();
-        // })
-        //     ;
-
-        // const movieIds = [
-        //     'bjN-3EyXNyE',
-        //     'We__CnrYa9U',
-        //     'I6ld4ecEp7s',
-        //     'azQVVhMUz58'
-        // ];
-
-        // let slotInterval;
-
-        // document.getElementById('slotStart').addEventListener('click', () => {
-        //     const slotDisplay = document.getElementById('slotDisplay');
-        //     slotInterval = setInterval(() => {
-        //         const randomIndex = Math.floor(Math.random() * movieIds.length);
-        //         const movieId = movieIds[randomIndex];
-        //         slotDisplay.textContent = `🎲 ${movieId} 🎲`;
-        //     }, 100);
-        // });
-
-        // document.getElementById('slotStop').addEventListener('click', () => {
-        //     clearInterval(slotInterval);
-        //     const selectedText = document.getElementById('slotDisplay').textContent;
-        //     const selectedId = selectedText.match(/[a-zA-Z0-9_-]{11}/);
-        //     if (selectedId) {
-        //         player.loadVideoById(selectedId[0]);
-        //     }
-        // });
-
-        // // 動画リスト
-        // const videoOptions = [
-        //     { id: "q0T8T_Acz70", title: "トップ製菓CM" },
-        //     { id: "zBqekh3glxA", title: "ACジャパン CM あいさつの魔法 30秒版" },
-        //     { id: "jSTjJp1gjZ4", title: "【CM】ニッスイ 活ちくわ" },
-        //     { id: "AeQpClPY8z4", title: "アフラック　新やさしいEVER　「持病の歌」" },
-        //     { id: "0mKEeqzqJtc", title: "東進ハイスクール「いつやるか？今でしょ！」CM" },
-        //     { id: "qfFywo6LrmU", title: "ドラえもんほっともっとCM集" },
-        // ];
-
-        // let slotTimer = null;
-
-        // let currentSlotIndex = 0;
-
-        // const slotDisplay = document.getElementById('slotDisplay');
-        // const slotStartBtn = document.getElementById('slotStart');
-        // const slotStopBtn = document.getElementById('slotStop');
-        // // const playSelected = document.getElementById('playSelected');
-
-        // function onPlayerReady(event) {
-        //     event.target.playVideo(); // プレイヤー準備完了後に再生
-        // }
-
-        // function onPlayerStateChange(event) {
-        // }
-
-        // // // プレイヤー作成関数
-        // // function createPlayer(videoId) {
-        // //     player = new YT.Player('player', {
-        // //         height: '390',
-        // //         width: '640',
-        // //         videoId: videoId,
-        // //         events: {
-        // //             'onReady': onPlayerReady,
-        // //             'onStateChange': onPlayerStateChange
-        // //         }
-        // //     });
-        // // }
-
-        // // スロットスタート
-        // slotStartBtn.addEventListener('click', function () {
-
-        //     if (slotTimer) return; // 連打防止
-        //     slotTimer = setInterval(() => {
-        //         currentSlotIndex = Math.floor(Math.random() * videoOptions.length);
-        //         slotDisplay.textContent = videoOptions[currentSlotIndex].title;
-        //     }, 100);
-        // })
-
-        // // スロットストップ
-        // slotStopBtn.addEventListener('click', function () {
-        //     if (!slotTimer) return; // 連打防止
-        //     clearInterval(slotTimer);
-        //     slotTimer = null;
-
-        //     const selected = videoOptions[currentSlotIndex];
-        //     slotDisplay.textContent = `🎉 選ばれたのは「${selected.title}」でした！`;
-
-        //     //プレイヤーの動画を切り替える
-        //     if (player && typeof player.loadVideoById === 'function') {
-        //         player.loadVideoById(selected.id);
-        //     } else {
-        //         // プレイヤーが存在しない場合は再生成
-        //         player = new YT.Player('player', {
-        //             height: '390',
-        //             width: '640',
-        //             videoId: selected.id,
-        //             events: {
-        //                 'onReady': onPlayerReady
-        //             }
-        //         });
-        //     };
-
-
-        //     //         //動画切り替えイベント
-        //     // let movieid = document.querySelector('#MovieId');
-        //     // movieid.addEventListener('change', function () {
-        //     //     youtubeId = movieid.value;
-        //     //     //プレイヤー削除
-        //     //     player.destroy();
-        //     //     onYouTubeIframeAPIReady();
-        //     // });
-
-        //     // // プレイヤー切り替え
-        //     // youtubeId = selected.id;
-        //     // player.destroy();
-        //     // // onYouTubeIframeAPIReady();
-        // })
-        //     ;
-
-        // const selected = videoOptions[currentSlotIndex];
-        // slotDisplay.textContent = `🎉 選ばれたのは「${selected.title}」でした！`;
-
-        // youtubeId = selected.id;
-        // player.destroy();
-        // onYouTubeIframeAPIReady(); // ←ここで再生成
-
-        // // プレイヤー再生成
-        // createPlayer(youtubeId);
-
-        // let selectedSlot = null; // 直前に切り替えたスロット番号を記憶
-
-        //     function changeSlotVideo() {
-        //         let newSlotIndex;
-        //         do {
-        //             newSlotIndex = Math.floor(Math.random() * 3); // 0〜2のランダム
-        //         } while (newSlotIndex === selectedSlot); // 前と同じスロットは避ける
-
-        //         selectedSlot = newSlotIndex;
-
-        //         const slot = videoOptions[newSlotIndex];
-        //         const newVideo = videoOptions[Math.floor(Math.random() * videoOptions.length)];
-        //         slot.innerHTML = `<iframe width="100%" height="100%" src="${newVideo}" frameborder="0" allowfullscreen></iframe>`;
-        //     }
-
-        //     const changeSongButton = document.getElementById('changeSong');
-        //     changeSongButton.addEventListener('click', changeSlotVideo);
-
-        // </script>
+    </script>
 
     <script src="./slot.js" defer></script>
 
