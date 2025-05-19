@@ -9,6 +9,7 @@ body {
     display: block;
     margin-left: auto;
     margin-right: auto;
+    margin-bottom: (80em/16);
 }
 
 #player {
@@ -21,6 +22,12 @@ body {
 
 .slot {
     text-align: center;
+}
+
+.slot-section {
+    display: flex;
+    justify-content: center;
+    gap: 100px;
 }
 
 
@@ -44,6 +51,10 @@ body {
 
 .btn:active {
     transform: scale(0.95);
+}
+
+.startBtn {
+    margin-bottom: 50px;
 }
 
 .movieid-btn,

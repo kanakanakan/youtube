@@ -7,99 +7,88 @@
 </head>
 
 <body>
-    <div class="inner">
-        <!-- 1. The <iframe> (and video player) will replace this <div> tag. -->
-        <!-- 1. ここの<div>タグがYoutubeの<iframe>に置き換わる。 -->
-        <div id="player"></div>
+    <div class="wrapper">
+        <!-- 左側：player + ボタン群 -->
+        <section class="video-control">
+            <div class="inner">
+                <div id="player"></div>
 
-
-        <div class="slot">
-            <h3>シャッフルマシンで動画を選ぼう！</h3>
-            <div id="slotDisplay" style="font-size: 24px; font-weight: bold; margin: 10px 0;">🎲 シャッフル未開始 🎲</div>
-            <button id="slotStart">スタート</button>
-            <button id="slotStop">ストップ</button>
-            <!-- スロット結果を再生するボタン -->
-        </div>
-
-        <div class="slot">
-            <h3>スロットで動画を選ぼう！</h3>
-            <div class="reels">
-                <div class="reel" id="reel1">
-                    <img src="./image/acjapan.jpg" alt="reel1" class="slot-image">
-                    <button class="stop-btn" data-reel="1">STOP</button>
-                </div>
-                <div class="reel" id="reel2">
-                    <img src="./image/acjapan.jpg" alt="reel2" class="slot-image">
-                    <button class="stop-btn" data-reel="2">STOP</button>
-                </div>
-                <div class="reel" id="reel3">
-                    <img src="./image/acjapan.jpg" alt="reel3" class="slot-image">
-                    <button class="stop-btn" data-reel="3">STOP</button>
+                <nav>
+                    <ul>
+                        <div class="control-group">
+                            <li class="btn" id="doplay">再生</li>
+                            <li class="btn" id="dostop">停止</li>
+                            <li class="btn" id="dopause">一時停止</li>
+                            <li class="btn" id="mute">ミュート</li>
+                            <li class="btn" id="do10sNext">10秒先へ</li>
+                            <li class="btn" id="do10sPrev">10秒戻る</li>
+                        </div>
+                        <div class="select-group">
+                            <li class="movieid-btn">
+                                <select id="MovieId" class="ytMovie" name="ytMovie">
+                                    <option selected>選択してください。</option>
+                                    <option value="bjN-3EyXNyE">TRiDENT『Alive』MV</option>
+                                    <option value="We__CnrYa9U">TRiDENT『DISTINATION』</option>
+                                    <option value="I6ld4ecEp7s">TRiDENT『IMAGINATION』MV</option>
+                                    <option value="azQVVhMUz58">TRiDENT『Continue』MV</option>
+                                </select>
+                            </li>
+                        </div>
+                        <div class="speed-group">
+                            <li class="speedBtn">
+                                <form id="doSpeed">
+                                    <input type="radio" id="mslow" name="speed" value="0.25" />
+                                    <label for="mslow">0.25</label>
+                                    <input type="radio" id="slow" name="speed" value="0.5" />
+                                    <label for="slow">0.5</label>
+                                    <input type="radio" id="normal" name="speed" value="1.0" checked />
+                                    <label for="normal">1</label>
+                                    <input type="radio" id="hspeed" name="speed" value="1.5" />
+                                    <label for="hspeed">1.5</label>
+                                    <input type="radio" id="mhspeed" name="speed" value="2" />
+                                    <label for="mhspeed">2</label>
+                                </form>
+                            </li>
+                        </div>
+                    </ul>
+                </nav>
+                <div class="control-group">
+                    <label>ボリューム<input type="range" min="0" max="100" name="volume" id="volume" value="50" />
+                        <span id="volumeNum"></span>
+                    </label>
                 </div>
             </div>
-            <button id="startBtn">スタート</button>
-            <div id="resultMessage"></div>
-            <!-- <div id="slotDisplay" style="font-size: 24px; font-weight: bold; margin: 10px 0;">🎰 スロット未開始 🎰</div>
-            <button id="slotStart">スタート</button>
-            <button id="slotStop">ストップ</button>
-            スロット結果を再生するボタン -->
-            <!-- <div class="images">
-                <img style="height: 200px;" src="./image/acjapan.jpg" alt="">
-                <img style="height: 200px;" src="./image/tikuwa.jpg" alt="">
-                <img style="height: 200px;" src="./image/topseika.jpeg" alt="">
-            </div> -->
-        </div>
+        </section>
 
-        <nav>
-            <form class="control-group">
-                <input type="search" id="ytSearch" value="" />
-                <button id="searchBtn">検索</button>
-            </form>
+        <!-- 右側：シャッフルとスロット -->
+        <section class="slot-section">
+            <div class="slot">
+                <h3>シャッフルマシンで動画を選ぼう！</h3>
+                <div id="slotDisplay" style="font-size: 24px; font-weight: bold; margin: 10px 0;">🎲 シャッフル未開始 🎲</div>
+                <button id="slotStart">スタート</button>
+                <button id="slotStop">ストップ</button>
+            </div>
 
-            <ul>
-                <div class="control-group">
-                    <li class="btn" id="doplay">再生</li>
-                    <li class="btn" id="dostop">停止</li>
-                    <li class="btn" id="dopause">一時停止</li>
-                    <li class="btn" id="mute">ミュート</li>
-                    <li class="btn" id="do10sNext">10秒先へ</li>
-                    <li class="btn" id="do10sPrev">10秒戻る</li>
+            <div class="slot">
+                <h3>スロットで動画を選ぼう！</h3>
+                <div class="reels">
+                    <div class="reel" id="reel1">
+                        <img src="./image/acjapan.jpg" alt="reel1" class="slot-image">
+                        <button class="stop-btn" data-reel="1">STOP</button>
+                    </div>
+                    <div class="reel" id="reel2">
+                        <img src="./image/acjapan.jpg" alt="reel2" class="slot-image">
+                        <button class="stop-btn" data-reel="2">STOP</button>
+                    </div>
+                    <div class="reel" id="reel3">
+                        <img src="./image/acjapan.jpg" alt="reel3" class="slot-image">
+                        <button class="stop-btn" data-reel="3">STOP</button>
+                    </div>
                 </div>
-                <div class="select-group">
-                    <li class="movieid-btn">
-                        <select id="MovieId" class="ytMovie" name="ytMovie">
-                            <option selected>選択してください。</option>
-                            <option value="bjN-3EyXNyE">TRiDENT『Alive』MV</option>
-                            <option value="We__CnrYa9U">TRiDENT『DISTINATION』</option>
-                            <option value="I6ld4ecEp7s">TRiDENT『IMAGINATION』MV</option>
-                            <option value="azQVVhMUz58">TRiDENT『Continue』MV【exガールズロックバンド革命】</option>
-                            </option>
-                        </select>
-                    </li>
-                </div>
-                <div class="speed-group">
-                    <li class="speedBtn">
-                        <form id="doSpeed">
-                            <input type="radio" id="mslow" name="speed" value="0.25" />
-                            <label for="mslow">0.25</label>
-                            <input type="radio" id="slow" name="speed" value="0.5" />
-                            <label for="slow">0.5</label>
-                            <input type="radio" id="normal" name="speed" value="1.0" checked />
-                            <label for="normal">1</label>
-                            <input type="radio" id="hspeed" name="speed" value="1.5" />
-                            <label for="hspeed">1.5</label>
-                            <input type="radio" id="mhspeed" name="speed" value="2" />
-                            <label for="mhspeed">2</label>
-                        </form>
-                    </li>
-                </div>
-            </ul>
-        </nav>
-        <div class="control-group">
-            <label>ボリューム<input type=" range" min="0" max="100" name="volume" id="volume" value="50" />
-                <span id="volumeNum"></span>
-            </label>
-        </div>
+                <button id="startBtn">スタート</button>
+                <div id="resultMessage"></div>
+            </div>
+        </section>
     </div>
 
     <script>
@@ -298,9 +287,9 @@
         //再生スピードイベント
         let speedBtn = document.querySelector('#doSpeed');
         speedBtn.addEventListener('change', function () {
-            // 数値でないと効かないので、文字列から数値に変換
+            // ラジオボタンの選択された値を数値として取得
             let speed = parseFloat(document.querySelector('input[name="speed"]:checked').value);
-            playSpeed(parseFloat(speedBtn.speed.value));
+            playSpeed(speed);
         });
 
         // //jQuery利用時の再生スピードイベント
@@ -393,6 +382,7 @@
 
         // スロットスタート
         slotStartBtn.addEventListener('click', function () {
+            console.log(シャッフルスタート);
             if (slotTimer) return; // 連打防止
             slotTimer = setInterval(() => {
                 currentSlotIndex = Math.floor(Math.random() * videoOptions.length);
@@ -470,6 +460,9 @@
         //     changeSongButton.addEventListener('click', changeSlotVideo);
 
         // </script>
+
+    <script src="./slot.js" defer></script>
+
 </body>
 
 </html>
