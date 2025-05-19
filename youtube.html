@@ -60,21 +60,24 @@
             </div>
 
             <form id="searchForm">
-                <input type="search" id="ytSearch" placeholder="動画検索" style="width: 80%; height:10%; padding: 8px;" />
+                <input type="search" id="ytSearch" placeholder="動画検索" style="width: 20%; height:10%; padding: 8px;" />
                 <button id="searchBtn" type="submit"
-                    style="padding: 8px; width:20%; height:10%; background-color: #2bb0c2; color: white; border: none; border-radius: 5px; cursor: pointer;">検索</button>
+                    style="padding: 8px; width:5%; height:10%; background-color: #00a552; color: white; border: none; border-radius: 5px; cursor: pointer;">検索</button>
             </form>
-            <h2 id="searchHeading"></h2>
-            <div id="result"></div>
+            <div class="searchlist" style="text-align: center;">
+                <h2 id="searchHeading"></h2>
+                <div id="result"></div>
+            </div>
         </section>
 
         <!-- 右側：シャッフルとスロット -->
-        <section class="slot-section">
-            <div class="slot">
+        <section class="shuffle-section">
+            <div class="shuffle">
                 <h3>シャッフルマシンで動画を選ぼう！</h3>
-                <div id="slotDisplay" style="font-size: 24px; font-weight: bold; margin: 10px 0;">🎲 シャッフル未開始 🎲</div>
-                <button class="slotStart" id="slotStart">スタート</button>
-                <button class="slotStop" id="slotStop">ストップ</button>
+                <div id="shuffleDisplay" style="font-size: 24px; font-weight: bold; margin: 10px 0;">🎲 シャッフル未開始 🎲
+                </div>
+                <button class="shuffleStart" id="shuffleStart">スタート</button>
+                <button class="shuffleStop" id="shuffleStop">ストップ</button>
             </div>
 
             <div class="slot">
@@ -333,13 +336,13 @@
             { id: "YK3p8Qp40f8", title: "十六茶 CM 「16チャージ！交差点」編 15秒 新垣結衣" },
         ];
 
-        let slotTimer = null;
+        let shuffleTimer = null;
 
-        let currentSlotIndex = 0;
+        let currentshuffleIndex = 0;
 
-        const slotDisplay = document.getElementById('slotDisplay');
-        const slotStartBtn = document.getElementById('slotStart');
-        const slotStopBtn = document.getElementById('slotStop');
+        const shuffleDisplay = document.getElementById('shuffleDisplay');
+        const shuffleStartBtn = document.getElementById('shuffleStart');
+        const shuffleStopBtn = document.getElementById('shuffleStop');
         // const playSelected = document.getElementById('playSelected');
 
         function onPlayerReady(event) {
@@ -351,22 +354,22 @@
         }
 
         // スロットスタート
-        slotStartBtn.addEventListener('click', function () {
-            if (slotTimer) return; // 連打防止
-            slotTimer = setInterval(() => {
-                currentSlotIndex = Math.floor(Math.random() * videoOptions.length);
-                slotDisplay.textContent = videoOptions[currentSlotIndex].title;
+        shuffleStartBtn.addEventListener('click', function () {
+            if (shuffleTimer) return; // 連打防止
+            shuffleTimer = setInterval(() => {
+                currentshuffleIndex = Math.floor(Math.random() * videoOptions.length);
+                shuffleDisplay.textContent = videoOptions[currentshuffleIndex].title;
             }, 100);
         })
 
         // スロットストップ
-        slotStopBtn.addEventListener('click', function () {
-            if (!slotTimer) return; // 連打防止
-            clearInterval(slotTimer);
-            slotTimer = null;
+        shuffleStopBtn.addEventListener('click', function () {
+            if (!shuffleTimer) return; // 連打防止
+            clearInterval(shuffleTimer);
+            shuffleTimer = null;
 
-            const selected = videoOptions[currentSlotIndex];
-            slotDisplay.textContent = `🎉 選ばれたのは「${selected.title}」でした！`;
+            const selected = videoOptions[currentshuffleIndex];
+            shuffleDisplay.textContent = `🎉 選ばれたのは「${selected.title}」でした！`;
 
             //プレイヤーの動画を切り替える
             if (player && typeof player.loadVideoById === 'function') {
@@ -401,7 +404,9 @@
             ;
 
         function ytSearch(val = '', showHeading = true) {
-            const key = 'AIzaSyA87AdqacGnMyKvhYhobeoeFjLdBOJfd58';
+            // const key = 'AIzaSyA87AdqacGnMyKvhYhobeoeFjLdBOJfd58';
+            const key = 'AIzaSyAlacGXiu5caP5p19dY_9NC9JB4m2ulwTI';
+
             const channelId = 'UCcGSTI830YkwaocFV31Q7MA';
             const resultDiv = document.getElementById('result');
             const heading = document.getElementById('searchHeading');
@@ -456,6 +461,57 @@
                     console.error(err);
                 });
         }
+
+
+
+        const apiKey = 'AIzaSyAlacGXiu5caP5p19dY_9NC9JB4m2ulwTI';
+
+        document.querySelector('#searchForm').addEventListener('submit', function (e) {
+            e.preventDefault();
+            const query = document.querySelector('#ytSearch').value.trim();
+            if (!query) return;
+
+            document.querySelector('#searchHeading').textContent = `「${query}」の検索結果`;
+
+            fetch(`https://www.googleapis.com/youtube/v3/search?part=snippet&type=video&maxResults=5&q=${encodeURIComponent(query)}&key=${apiKey}`)
+                .then(response => response.json())
+                .then(data => {
+                    const result = document.querySelector('#result');
+                    result.innerHTML = ''; // 前回の結果をクリア
+
+                    if (!data.items.length) {
+                        result.innerHTML = '<p>検索結果が見つかりませんでした。</p>';
+                        return;
+                    }
+
+                    data.items.forEach(item => {
+                        const videoId = item.id.videoId;
+                        const title = item.snippet.title;
+                        const thumbnail = item.snippet.thumbnails.medium.url;
+
+                        const videoItem = document.createElement('div');
+                        videoItem.classList.add('search-result');
+                        videoItem.innerHTML = `
+                    <img src="${thumbnail}" alt="${title}" style="width: 500px; cursor: pointer;" data-video-id="${videoId}">
+                    <p>${title}</p>
+                `;
+                        result.appendChild(videoItem);
+                    });
+
+                    // サムネイルクリックで動画を再生
+                    document.querySelectorAll('.search-result img').forEach(img => {
+                        img.addEventListener('click', function () {
+                            const videoId = this.getAttribute('data-video-id');
+                            player.loadVideoById(videoId);
+                        });
+                    });
+                })
+                .catch(error => {
+                    console.error('検索中にエラーが発生しました:', error);
+                    document.querySelector('#result').innerHTML = '<p>検索中にエラーが発生しました。</p>';
+                });
+        });
+
 
 
         // // 動画リスト
