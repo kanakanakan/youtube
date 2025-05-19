@@ -58,6 +58,14 @@
                     </label>
                 </div>
             </div>
+
+            <form id="searchForm">
+                <input type="search" id="ytSearch" placeholder="動画検索" style="width: 80%; height:10%; padding: 8px;" />
+                <button id="searchBtn" type="submit"
+                    style="padding: 8px; width:20%; height:10%; background-color: #2bb0c2; color: white; border: none; border-radius: 5px; cursor: pointer;">検索</button>
+            </form>
+            <h2 id="searchHeading"></h2>
+            <div id="result"></div>
         </section>
 
         <!-- 右側：シャッフルとスロット -->
@@ -65,8 +73,8 @@
             <div class="slot">
                 <h3>シャッフルマシンで動画を選ぼう！</h3>
                 <div id="slotDisplay" style="font-size: 24px; font-weight: bold; margin: 10px 0;">🎲 シャッフル未開始 🎲</div>
-                <button id="slotStart">スタート</button>
-                <button id="slotStop">ストップ</button>
+                <button class="slotStart" id="slotStart">スタート</button>
+                <button class="slotStop" id="slotStop">ストップ</button>
             </div>
 
             <div class="slot">
@@ -158,150 +166,124 @@
             player.playVideo();
         }
 
-        //再生イベント
-        let doplayBtn = document.querySelector('#doplay');
-        doplayBtn.addEventListener('click', function () {
-            playTheVideo(); //関数名に変更
-        });
+        document.addEventListener('DOMContentLoaded', function () {
 
-        //停止イベント
-        let dostopBtn = document.querySelector('#dostop');
-        dostopBtn.addEventListener('click', function () {
-            stopVideo();
-        });
+            //再生イベント
+            let doplayBtn = document.querySelector('#doplay');
+            doplayBtn.addEventListener('click', function () {
+                playTheVideo(); //関数名に変更
+            });
 
-        //一時停止関数
-        function pauseTheVideo() {
-            player.pauseVideo();
-        }
+            //停止イベント
+            let dostopBtn = document.querySelector('#dostop');
+            dostopBtn.addEventListener('click', function () {
+                stopVideo();
+            });
 
-        //一時停止イベント
-        let dopauseBtn = document.querySelector('#dopause');
-        dopauseBtn.addEventListener('click', function () {
-            pauseTheVideo();
-        });
-
-        //ミュート関数
-        function onMute() {
-            //ミュートの時、trueを返すのでミュートを解除します。
-            if (player.isMuted()) {
-                player.unMute();
-            } else {
-                //ミュートが解除されている時はfalseなので、ミュートにします。
-                player.mute();
+            //一時停止関数
+            function pauseTheVideo() {
+                player.pauseVideo();
             }
-        }
 
-        //ミュートイベント
-        let onMuteBtn = document.querySelector('#mute');
-        onMuteBtn.addEventListener('click', function () {
-            onMute();
-            if (onMuteBtn.innerText === 'ミュート') {
-                onMuteBtn.innerText = 'ミュート解除';
-            } else {
-                onMuteBtn.innerText = 'ミュート';
+            //一時停止イベント
+            let dopauseBtn = document.querySelector('#dopause');
+            dopauseBtn.addEventListener('click', function () {
+                pauseTheVideo();
+            });
+
+            //ミュート関数
+            function onMute() {
+                //ミュートの時、trueを返すのでミュートを解除します。
+                if (player.isMuted()) {
+                    player.unMute();
+                } else {
+                    //ミュートが解除されている時はfalseなので、ミュートにします。
+                    player.mute();
+                }
             }
+
+            //ミュートイベント
+            let onMuteBtn = document.querySelector('#mute');
+            onMuteBtn.addEventListener('click', function () {
+                onMute();
+                if (onMuteBtn.innerText === 'ミュート') {
+                    onMuteBtn.innerText = 'ミュート解除';
+                } else {
+                    onMuteBtn.innerText = 'ミュート';
+                }
+            });
+
+            //10秒前にの関数
+            function onePrev() {
+                let currentTime = player.getCurrentTime();
+                player.seekTo(currentTime - 10);
+            }
+
+            //10秒後にの関数
+            function oneNext() {
+                let currentTime = player.getCurrentTime();
+                player.seekTo(currentTime + 10);
+            }
+
+            //10秒前へイベント
+            let onePrevBtn = document.querySelector('#do10sPrev');
+            onePrevBtn.addEventListener('click', function () {
+                onePrev();
+            });
+
+            //10秒後へイベント
+            let oneNextBtn = document.querySelector('#do10sNext');
+            oneNextBtn.addEventListener('click', function () {
+                oneNext();
+            });
+
+            //ボリューム関数
+            function volumeFn(vol) {
+                let currentVol = player.getVolume();
+                player.setVolume(vol);
+            }
+
+            //ボリュームイベント
+            let volumeBtn = document.querySelector('#volume');
+            let volumeTxt = document.querySelector('#volumeNum');
+            volumeBtn.addEventListener('change', function () {
+                volumeFn(this.value);
+                volumeTxt.textContent = this.value;
+            });
+
+            //動画切り替えイベント
+            let movieid = document.querySelector('#MovieId');
+            movieid.addEventListener('change', function () {
+                youtubeId = movieid.value;
+                //プレイヤー削除
+                player.destroy();
+                onYouTubeIframeAPIReady();
+            });
+
+            //再生スピード関数
+            function playSpeed(num) {
+                //setPlaybackRateが再生スピードをセットするメソッド
+                console.log(num);
+                player.setPlaybackRate(num);
+                player.playVideo();
+            }
+
+            //再生スピードイベント
+            let speedBtn = document.querySelector('#doSpeed');
+            speedBtn.addEventListener('change', function () {
+                // ラジオボタンの選択された値を数値として取得
+                let speed = parseFloat(document.querySelector('input[name="speed"]:checked').value);
+                playSpeed(speed);
+            });
+
+            const selectvideo = document.querySelector(".searchlist");
+
         });
-
-        // //jQueryを利用時のミュートイベント
-        // $('#mute').on('click', function () {
-        //     onMute();
-        //     if ($(this).text() === 'ミュート') {
-        //         $(this).text('ミュート解除');
-        //     } else {
-        //         $(this).text('ミュート');
-        //     }
-        // });
-
-        //10秒前にの関数
-        function onePrev() {
-            let currentTime = player.getCurrentTime();
-            player.seekTo(currentTime - 10);
-        }
-
-        //10秒後にの関数
-        function oneNext() {
-            let currentTime = player.getCurrentTime();
-            player.seekTo(currentTime + 10);
-        }
-
-        //10秒前へイベント
-        let onePrevBtn = document.querySelector('#do10sPrev');
-        onePrevBtn.addEventListener('click', function () {
-            onePrev();
-        });
-
-        //10秒後へイベント
-        let oneNextBtn = document.querySelector('#do10sNext');
-        oneNextBtn.addEventListener('click', function () {
-            oneNext();
-        });
-
-        // //jQuery利用時の10秒前へイベント
-        // $('#do10sPrev').on('click', function () {
-        //     onePrev();
-        // });
-
-        // //jQuery利用時の10秒後へイベント
-        // $('#do10sNext').on('click', function () {
-        //     oneNext();
-        // });
-
-        //ボリューム関数
-        function volumeFn(vol) {
-            let currentVol = player.getVolume();
-            player.setVolume(vol);
-        }
-
-        //ボリュームイベント
-        let volumeBtn = document.querySelector('#volume');
-        let volumeTxt = document.querySelector('#volumeNum');
-        volumeBtn.addEventListener('change', function () {
-            volumeFn(this.value);
-            volumeTxt.textContent = this.value;
-        });
-
-        // //jQuery利用時のボリュームイベント
-        // $('#volume').on('change', function () {
-        //     volumeFn($(this).val());
-        //     $('#volumeNum').text($(this).val());
-        // });
-
-        //動画切り替えイベント
-        let movieid = document.querySelector('#MovieId');
-        movieid.addEventListener('change', function () {
-            youtubeId = movieid.value;
-            //プレイヤー削除
-            player.destroy();
-            onYouTubeIframeAPIReady();
-        });
-
-        //再生スピード関数
-        function playSpeed(num) {
-            //setPlaybackRateが再生スピードをセットするメソッド
-            console.log(num);
-            player.setPlaybackRate(num);
-            player.playVideo();
-        }
-
-        //再生スピードイベント
-        let speedBtn = document.querySelector('#doSpeed');
-        speedBtn.addEventListener('change', function () {
-            // ラジオボタンの選択された値を数値として取得
-            let speed = parseFloat(document.querySelector('input[name="speed"]:checked').value);
-            playSpeed(speed);
-        });
-
-        // //jQuery利用時の再生スピードイベント
-        //     $('#doSpeed input[name = speed]').on('change', function () {
-        //         //数値でないと効かないので、文字列から数値に変換
-        //         playSpeed(parseFloat($(this).val()));
-        //     });
-        const selectvideo = document.querySelector(".searchlist");
 
         // 授業資料からコピペ
         function ytSearch(val) {
-            const key = 'AIzaSyDzI38gmiQxvN89cx3Ur-uygpl9-QbU16k'; //自分のキーに書き換えます。
+            // const key = 'AIzaSyDzI38gmiQxvN89cx3Ur-uygpl9-QbU16k'; //自分のキーに書き換えます。
+            const key = 'AIzaSyAlacGXiu5caP5p19dY_9NC9JB4m2ulwTI'; //自分のキーに書き換えます。
             const num = 10;
             const part = 'snippet';
             const type = 'video';
@@ -335,19 +317,20 @@
             e.preventDefault(); //検索ボタンの送信をストップしておく。
         });
 
-        // とりあえず確認用
-        document.body.addEventListener('click', function () {
-            ytSearch('HIKAKIN');
-        })
+        // // とりあえず確認用
+        // document.body.addEventListener('click', function () {
+        //     ytSearch('HIKAKIN');
+        // })
+
 
         // 動画リスト
         const videoOptions = [
-            { id: "q0T8T_Acz70", title: "トップ製菓CM" },
-            { id: "zBqekh3glxA", title: "ACジャパン CM あいさつの魔法 30秒版" },
-            { id: "jSTjJp1gjZ4", title: "【CM】ニッスイ 活ちくわ" },
-            { id: "AeQpClPY8z4", title: "アフラック　新やさしいEVER　「持病の歌」" },
-            { id: "0mKEeqzqJtc", title: "東進ハイスクール「いつやるか？今でしょ！」CM" },
-            { id: "qfFywo6LrmU", title: "ドラえもんほっともっとCM集" },
+            { id: "rcghp1hPEKo", title: "【綾鷹】 おにぎり食堂 綾鷹屋 上白石 萌歌 TVCM「鮭おにぎり」篇 15秒 AYATAKA TVCF" },
+            { id: "Yqoa0s_yw7Q", title: "阿部寛出演／コカ・コーラシステム「やかんの濃麦茶 from 爽健美茶」新CM「初めての濃いに夢中」篇 15秒" },
+            { id: "jXTX4oo96M8", title: "サントリー緑茶 伊右衛門 特茶 『人生の階段』コウメ太夫" },
+            { id: "XghThSrjknE", title: "お〜いお茶「お〜いオオタニサン！」篇 30秒" },
+            { id: "aZYM6T_6LTY", title: "吉沢亮出演／6年ぶり大刷新「キリン 生茶」新CM「新・やさしさ（4月）」篇" },
+            { id: "YK3p8Qp40f8", title: "十六茶 CM 「16チャージ！交差点」編 15秒 新垣結衣" },
         ];
 
         let slotTimer = null;
@@ -367,22 +350,8 @@
             // 状態変化に応じて何かしたい場合ここに
         }
 
-        // // プレイヤー作成関数
-        // function createPlayer(videoId) {
-        //     player = new YT.Player('player', {
-        //         height: '390',
-        //         width: '640',
-        //         videoId: videoId,
-        //         events: {
-        //             'onReady': onPlayerReady,
-        //             'onStateChange': onPlayerStateChange
-        //         }
-        //     });
-        // }
-
         // スロットスタート
         slotStartBtn.addEventListener('click', function () {
-            console.log(シャッフルスタート);
             if (slotTimer) return; // 連打防止
             slotTimer = setInterval(() => {
                 currentSlotIndex = Math.floor(Math.random() * videoOptions.length);
@@ -430,6 +399,361 @@
             // // onYouTubeIframeAPIReady();
         })
             ;
+
+        function ytSearch(val = '', showHeading = true) {
+            const key = 'AIzaSyA87AdqacGnMyKvhYhobeoeFjLdBOJfd58';
+            const channelId = 'UCcGSTI830YkwaocFV31Q7MA';
+            const resultDiv = document.getElementById('result');
+            const heading = document.getElementById('searchHeading');
+            const errorDiv = document.getElementById('error');
+
+            if (val === '') heading.textContent = 'おすすめ';
+            else if (showHeading) heading.textContent = `けんさくけっか：「${val}」`;
+
+            resultDiv.innerHTML = '';
+            errorDiv.textContent = '';
+
+            const url = `https://www.googleapis.com/youtube/v3/search?type=video&part=snippet&channelId=${channelId}&maxResults=10&key=${key}` + (val ? `&q=${encodeURIComponent(val)}` : '');
+
+            fetch(url)
+                .then(res => {
+                    if (!res.ok) throw new Error('APIエラー');
+                    return res.json();
+                })
+                .then(obj => {
+                    if (!obj.items || obj.items.length === 0) {
+                        if (val) errorDiv.textContent = '動画が見つかりませんでした。';
+                        return;
+                    }
+                    for (let movie of obj.items) {
+                        const ytId = movie.id.videoId;
+                        const ytTitle = movie.snippet.title;
+                        const ytThumbnail = movie.snippet.thumbnails.medium.url;
+
+                        const videoCard = document.createElement('div');
+                        videoCard.classList.add('videoCard');
+
+                        const img = document.createElement('img');
+                        img.src = ytThumbnail;
+                        img.alt = ytTitle;
+                        img.addEventListener('click', () => player.loadVideoById(ytId));
+
+                        const titleLink = document.createElement('a');
+                        titleLink.href = '#';
+                        titleLink.textContent = ytTitle;
+                        titleLink.addEventListener('click', (e) => {
+                            e.preventDefault();
+                            player.loadVideoById(ytId);
+                        });
+
+                        videoCard.appendChild(img);
+                        videoCard.appendChild(titleLink);
+                        resultDiv.appendChild(videoCard);
+                    }
+                })
+                .catch(err => {
+                    if (val) errorDiv.textContent = '検索に失敗しました。';
+                    console.error(err);
+                });
+        }
+
+
+        // // 動画リスト
+        // const videoOptions = [
+        //     { id: "rcghp1hPEKo", title: "【綾鷹】 おにぎり食堂 綾鷹屋 上白石 萌歌 TVCM「鮭おにぎり」篇 15秒 AYATAKA TVCF" },
+        //     { id: "Yqoa0s_yw7Q", title: "阿部寛出演／コカ・コーラシステム「やかんの濃麦茶 from 爽健美茶」新CM「初めての濃いに夢中」篇 15秒" },
+        //     { id: "jXTX4oo96M8", title: "サントリー緑茶 伊右衛門 特茶 『人生の階段』コウメ太夫" },
+        //     { id: "XghThSrjknE", title: "お〜いお茶「お〜いオオタニサン！」篇 30秒" },
+        //     { id: "aZYM6T_6LTY", title: "吉沢亮出演／6年ぶり大刷新「キリン 生茶」新CM「新・やさしさ（4月）」篇" },
+        //     { id: "YK3p8Qp40f8", title: "十六茶 CM 「16チャージ！交差点」編 15秒 新垣結衣" },
+        // ];
+
+        // let slotTimer = null;
+
+        // let currentSlotIndex = 0;
+
+        // const slotDisplay = document.getElementById('slotDisplay');
+        // const slotStartBtn = document.getElementById('slotStart');
+        // const slotStopBtn = document.getElementById('slotStop');
+        // // const playSelected = document.getElementById('playSelected');
+
+        // function onPlayerReady(event) {
+        //     event.target.playVideo(); // プレイヤー準備完了後に再生
+        // }
+
+        // function onPlayerStateChange(event) {
+        //     // 状態変化に応じて何かしたい場合ここに
+        // }
+
+        // // // プレイヤー作成関数
+        // // function createPlayer(videoId) {
+        // //     player = new YT.Player('player', {
+        // //         height: '390',
+        // //         width: '640',
+        // //         videoId: videoId,
+        // //         events: {
+        // //             'onReady': onPlayerReady,
+        // //             'onStateChange': onPlayerStateChange
+        // //         }
+        // //     });
+        // // }
+
+        // // スロットスタート
+        // slotStartBtn.addEventListener('click', function () {
+        //     if (slotTimer) return; // 連打防止
+        //     slotTimer = setInterval(() => {
+        //         currentSlotIndex = Math.floor(Math.random() * videoOptions.length);
+        //         slotDisplay.textContent = videoOptions[currentSlotIndex].title;
+        //     }, 100);
+        // })
+
+        // // スロットストップ
+        // slotStopBtn.addEventListener('click', function () {
+        //     if (!slotTimer) return; // 連打防止
+        //     clearInterval(slotTimer);
+        //     slotTimer = null;
+
+        //     const selected = videoOptions[currentSlotIndex];
+        //     slotDisplay.textContent = `🎉 選ばれたのは「${selected.title}」でした！`;
+
+        //     //プレイヤーの動画を切り替える
+        //     if (player && typeof player.loadVideoById === 'function') {
+        //         player.loadVideoById(selected.id);
+        //     } else {
+        //         // プレイヤーが存在しない場合は再生成
+        //         player = new YT.Player('player', {
+        //             height: '390',
+        //             width: '640',
+        //             videoId: selected.id,
+        //             events: {
+        //                 'onReady': onPlayerReady
+        //             }
+        //         });
+        //     };
+
+
+        //         //動画切り替えイベント
+        // let movieid = document.querySelector('#MovieId');
+        // movieid.addEventListener('change', function () {
+        //     youtubeId = movieid.value;
+        //     //プレイヤー削除
+        //     player.destroy();
+        //     onYouTubeIframeAPIReady();
+        // });
+
+        // // プレイヤー切り替え
+        // youtubeId = selected.id;
+        // player.destroy();
+        // // onYouTubeIframeAPIReady();
+        // })
+        //     ;
+
+        // // 動画リスト
+        // const videoOptions = [
+        //     { id: "rcghp1hPEKo", title: "【綾鷹】 おにぎり食堂 綾鷹屋 上白石 萌歌 TVCM「鮭おにぎり」篇 15秒 AYATAKA TVCF" },
+        //     { id: "Yqoa0s_yw7Q", title: "阿部寛出演／コカ・コーラシステム「やかんの濃麦茶 from 爽健美茶」新CM「初めての濃いに夢中」篇 15秒" },
+        //     { id: "jXTX4oo96M8", title: "サントリー緑茶 伊右衛門 特茶 『人生の階段』コウメ太夫" },
+        //     { id: "XghThSrjknE", title: "お〜いお茶「お〜いオオタニサン！」篇 30秒" },
+        //     { id: "aZYM6T_6LTY", title: "吉沢亮出演／6年ぶり大刷新「キリン 生茶」新CM「新・やさしさ（4月）」篇" },
+        //     { id: "YK3p8Qp40f8", title: "十六茶 CM 「16チャージ！交差点」編 15秒 新垣結衣" },
+        // ];
+
+        // let slotTimer = null;
+
+        // let currentSlotIndex = 0;
+
+        // const slotDisplay = document.getElementById('slotDisplay');
+        // const slotStartBtn = document.getElementById('slotStart');
+        // const slotStopBtn = document.getElementById('slotStop');
+        // // const playSelected = document.getElementById('playSelected');
+
+        // function onPlayerReady(event) {
+        //     event.target.playVideo(); // プレイヤー準備完了後に再生
+        // }
+
+        // function onPlayerStateChange(event) {
+        //     // 状態変化に応じて何かしたい場合ここに
+        // }
+
+        // // // プレイヤー作成関数
+        // // function createPlayer(videoId) {
+        // //     player = new YT.Player('player', {
+        // //         height: '390',
+        // //         width: '640',
+        // //         videoId: videoId,
+        // //         events: {
+        // //             'onReady': onPlayerReady,
+        // //             'onStateChange': onPlayerStateChange
+        // //         }
+        // //     });
+        // // }
+
+        // // スロットスタート
+        // slotStartBtn.addEventListener('click', function () {
+        //     if (slotTimer) return; // 連打防止
+        //     slotTimer = setInterval(() => {
+        //         currentSlotIndex = Math.floor(Math.random() * videoOptions.length);
+        //         slotDisplay.textContent = videoOptions[currentSlotIndex].title;
+        //     }, 100);
+        // })
+
+        // // スロットストップ
+        // slotStopBtn.addEventListener('click', function () {
+        //     if (!slotTimer) return; // 連打防止
+        //     clearInterval(slotTimer);
+        //     slotTimer = null;
+
+        //     const selected = videoOptions[currentSlotIndex];
+        //     slotDisplay.textContent = `🎉 選ばれたのは「${selected.title}」でした！`;
+
+        //     //プレイヤーの動画を切り替える
+        //     if (player && typeof player.loadVideoById === 'function') {
+        //         player.loadVideoById(selected.id);
+        //     } else {
+        //         // プレイヤーが存在しない場合は再生成
+        //         player = new YT.Player('player', {
+        //             height: '390',
+        //             width: '640',
+        //             videoId: selected.id,
+        //             events: {
+        //                 'onReady': onPlayerReady
+        //             }
+        //         });
+        //     };
+
+
+        //     //         //動画切り替えイベント
+        //     // let movieid = document.querySelector('#MovieId');
+        //     // movieid.addEventListener('change', function () {
+        //     //     youtubeId = movieid.value;
+        //     //     //プレイヤー削除
+        //     //     player.destroy();
+        //     //     onYouTubeIframeAPIReady();
+        //     // });
+
+        //     // // プレイヤー切り替え
+        //     // youtubeId = selected.id;
+        //     // player.destroy();
+        //     // // onYouTubeIframeAPIReady();
+        // })
+        //     ;
+
+        // const movieIds = [
+        //     'bjN-3EyXNyE',
+        //     'We__CnrYa9U',
+        //     'I6ld4ecEp7s',
+        //     'azQVVhMUz58'
+        // ];
+
+        // let slotInterval;
+
+        // document.getElementById('slotStart').addEventListener('click', () => {
+        //     const slotDisplay = document.getElementById('slotDisplay');
+        //     slotInterval = setInterval(() => {
+        //         const randomIndex = Math.floor(Math.random() * movieIds.length);
+        //         const movieId = movieIds[randomIndex];
+        //         slotDisplay.textContent = `🎲 ${movieId} 🎲`;
+        //     }, 100);
+        // });
+
+        // document.getElementById('slotStop').addEventListener('click', () => {
+        //     clearInterval(slotInterval);
+        //     const selectedText = document.getElementById('slotDisplay').textContent;
+        //     const selectedId = selectedText.match(/[a-zA-Z0-9_-]{11}/);
+        //     if (selectedId) {
+        //         player.loadVideoById(selectedId[0]);
+        //     }
+        // });
+
+        // // 動画リスト
+        // const videoOptions = [
+        //     { id: "q0T8T_Acz70", title: "トップ製菓CM" },
+        //     { id: "zBqekh3glxA", title: "ACジャパン CM あいさつの魔法 30秒版" },
+        //     { id: "jSTjJp1gjZ4", title: "【CM】ニッスイ 活ちくわ" },
+        //     { id: "AeQpClPY8z4", title: "アフラック　新やさしいEVER　「持病の歌」" },
+        //     { id: "0mKEeqzqJtc", title: "東進ハイスクール「いつやるか？今でしょ！」CM" },
+        //     { id: "qfFywo6LrmU", title: "ドラえもんほっともっとCM集" },
+        // ];
+
+        // let slotTimer = null;
+
+        // let currentSlotIndex = 0;
+
+        // const slotDisplay = document.getElementById('slotDisplay');
+        // const slotStartBtn = document.getElementById('slotStart');
+        // const slotStopBtn = document.getElementById('slotStop');
+        // // const playSelected = document.getElementById('playSelected');
+
+        // function onPlayerReady(event) {
+        //     event.target.playVideo(); // プレイヤー準備完了後に再生
+        // }
+
+        // function onPlayerStateChange(event) {
+        // }
+
+        // // // プレイヤー作成関数
+        // // function createPlayer(videoId) {
+        // //     player = new YT.Player('player', {
+        // //         height: '390',
+        // //         width: '640',
+        // //         videoId: videoId,
+        // //         events: {
+        // //             'onReady': onPlayerReady,
+        // //             'onStateChange': onPlayerStateChange
+        // //         }
+        // //     });
+        // // }
+
+        // // スロットスタート
+        // slotStartBtn.addEventListener('click', function () {
+
+        //     if (slotTimer) return; // 連打防止
+        //     slotTimer = setInterval(() => {
+        //         currentSlotIndex = Math.floor(Math.random() * videoOptions.length);
+        //         slotDisplay.textContent = videoOptions[currentSlotIndex].title;
+        //     }, 100);
+        // })
+
+        // // スロットストップ
+        // slotStopBtn.addEventListener('click', function () {
+        //     if (!slotTimer) return; // 連打防止
+        //     clearInterval(slotTimer);
+        //     slotTimer = null;
+
+        //     const selected = videoOptions[currentSlotIndex];
+        //     slotDisplay.textContent = `🎉 選ばれたのは「${selected.title}」でした！`;
+
+        //     //プレイヤーの動画を切り替える
+        //     if (player && typeof player.loadVideoById === 'function') {
+        //         player.loadVideoById(selected.id);
+        //     } else {
+        //         // プレイヤーが存在しない場合は再生成
+        //         player = new YT.Player('player', {
+        //             height: '390',
+        //             width: '640',
+        //             videoId: selected.id,
+        //             events: {
+        //                 'onReady': onPlayerReady
+        //             }
+        //         });
+        //     };
+
+
+        //     //         //動画切り替えイベント
+        //     // let movieid = document.querySelector('#MovieId');
+        //     // movieid.addEventListener('change', function () {
+        //     //     youtubeId = movieid.value;
+        //     //     //プレイヤー削除
+        //     //     player.destroy();
+        //     //     onYouTubeIframeAPIReady();
+        //     // });
+
+        //     // // プレイヤー切り替え
+        //     // youtubeId = selected.id;
+        //     // player.destroy();
+        //     // // onYouTubeIframeAPIReady();
+        // })
+        //     ;
 
         // const selected = videoOptions[currentSlotIndex];
         // slotDisplay.textContent = `🎉 選ばれたのは「${selected.title}」でした！`;
