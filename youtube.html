@@ -12,45 +12,10 @@
             <div class="inner">
                 <div id="player"></div>
 
-                <nav>
-                    <ul style="padding: 0;">
-
-                        <div class="control-group">
-                            <ul class="button-list">
-                                <li class="btn" id="doplay">
-                                    <span class="key">Space</span>
-                                    <span class="label">再生</span>
-                                </li>
-                                <li class="btn" id="dostop">
-                                    <span class="key">S</span>
-                                    <span class="label">停止</span>
-                                </li>
-                                <li class="btn" id="dopause">
-                                    <span class="key">Space</span>
-                                    <span class="label">一時停止</span>
-                                </li>
-                                <li class="btn" id="mute">
-                                    <span class="key">M</span>
-                                    <span class="label">ミュート</span>
-                                </li>
-                                <li class="btn" id="do10sNext">
-                                    <span class="key">→</span>
-                                    <span class="label">10秒先へ</span>
-                                </li>
-                                <li class="btn" id="do10sPrev">
-                                    <span class="key">←</span>
-                                    <span class="label">10秒戻る</span>
-                                </li>
-                            </ul>
-                        </div>
-                        <!-- <div class="control-group"> -->
-                        <!-- <li class="btn" id="doplay">再生</li>
-                            <li class="btn" id="dostop">停止</li>
-                            <li class="btn" id="dopause">一時停止</li>
-                            <li class="btn" id="mute">ミュート</li>
-                            <li class="btn" id="do10sNext">10秒先へ</li>
-                            <li class="btn" id="do10sPrev">10秒戻る</li> -->
-                        <!-- <li class="btn" id="doplay">
+                <nav style="padding: 0;">
+                    <div class="control-group">
+                        <ul class="button-list">
+                            <li class="btn" id="doplay">
                                 <span class="key">Space</span>
                                 <span class="label">再生</span>
                             </li>
@@ -74,35 +39,36 @@
                                 <span class="key">←</span>
                                 <span class="label">10秒戻る</span>
                             </li>
-                        </div> -->
-                        <div class="select-group">
-                            <li class="movieid-btn">
-                                <select id="MovieId" class="ytMovie" name="ytMovie">
-                                    <option selected>選択してください。</option>
-                                    <option value="bjN-3EyXNyE">TRiDENT『Alive』MV</option>
-                                    <option value="We__CnrYa9U">TRiDENT『DISTINATION』</option>
-                                    <option value="I6ld4ecEp7s">TRiDENT『IMAGINATION』MV</option>
-                                    <option value="azQVVhMUz58">TRiDENT『Continue』MV</option>
-                                </select>
-                            </li>
-                        </div>
-                        <div class="speed-group">
-                            <li class="speedBtn">
-                                <form id="doSpeed">
-                                    <input type="radio" id="mslow" name="speed" value="0.25" />
-                                    <label for="mslow">0.25</label>
-                                    <input type="radio" id="slow" name="speed" value="0.5" />
-                                    <label for="slow">0.5</label>
-                                    <input type="radio" id="normal" name="speed" value="1.0" checked />
-                                    <label for="normal">1</label>
-                                    <input type="radio" id="hspeed" name="speed" value="1.5" />
-                                    <label for="hspeed">1.5</label>
-                                    <input type="radio" id="mhspeed" name="speed" value="2" />
-                                    <label for="mhspeed">2</label>
-                                </form>
-                            </li>
-                        </div>
-                    </ul>
+                        </ul>
+                    </div>
+
+                    <div class="select-group">
+                        <li class="movieid-btn">
+                            <select id="MovieId" class="ytMovie" name="ytMovie">
+                                <option selected>選択してください。</option>
+                                <option value="bjN-3EyXNyE">TRiDENT『Alive』MV</option>
+                                <option value="We__CnrYa9U">TRiDENT『DISTINATION』</option>
+                                <option value="I6ld4ecEp7s">TRiDENT『IMAGINATION』MV</option>
+                                <option value="azQVVhMUz58">TRiDENT『Continue』MV</option>
+                            </select>
+                        </li>
+                    </div>
+                    <div class="speed-group">
+                        <li class="speedBtn">
+                            <form id="doSpeed">
+                                <input type="radio" id="mslow" name="speed" value="0.25" />
+                                <label for="mslow">0.25</label>
+                                <input type="radio" id="slow" name="speed" value="0.5" />
+                                <label for="slow">0.5</label>
+                                <input type="radio" id="normal" name="speed" value="1.0" checked />
+                                <label for="normal">1</label>
+                                <input type="radio" id="hspeed" name="speed" value="1.5" />
+                                <label for="hspeed">1.5</label>
+                                <input type="radio" id="mhspeed" name="speed" value="2" />
+                                <label for="mhspeed">2</label>
+                            </form>
+                        </li>
+                    </div>
                 </nav>
                 <div class="control-group">
                     <label>ボリューム<input type="range" min="0" max="100" name="volume" id="volume" value="50" />
@@ -342,7 +308,7 @@
         // 授業資料からコピペ
         function ytSearch(val) {
             // const key = 'AIzaSyDzI38gmiQxvN89cx3Ur-uygpl9-QbU16k'; //自分のキーに書き換えます。
-            const key = 'AIzaSyAlacGXiu5caP5p19dY_9NC9JB4m2ulwTI'; //自分のキーに書き換えます。
+            const key = 'AIzaSyAc1D57-T6aMEGc_W8PFEOwminz8RGJzkg'; //自分のキーに書き換えます。
             const num = 10;
             const part = 'snippet';
             const type = 'video';
@@ -411,19 +377,6 @@
             document.querySelector('#volume').value = currentVol;
             document.querySelector('#volumeNum').textContent = currentVol;
 
-            // let isMuted = false;
-
-            // onMuteBtn.addEventListener('click', function () {
-            //     if (isMuted) {
-            //         player.unMute();
-            //         onMuteBtn.innerText = 'ミュート';
-            //         isMuted = false;
-            //     } else {
-            //         player.mute();
-            //         onMuteBtn.innerText = 'ミュート解除';
-            //         isMuted = true;
-            //     }
-            // });
             const muteBtn = document.querySelector('#mute');
             const keySpan = muteBtn.querySelector('.key');    // M
             const labelSpan = muteBtn.querySelector('.label'); // ミュート / ミュート解除
@@ -480,7 +433,7 @@
             ;
 
         function ytSearch(val = '', showHeading = true) {
-            const key = 'AIzaSyAlacGXiu5caP5p19dY_9NC9JB4m2ulwTI';
+            const key = 'AIzaSyAc1D57-T6aMEGc_W8PFEOwminz8RGJzkg';
 
             const channelId = 'UCcGSTI830YkwaocFV31Q7MA';
             const resultDiv = document.getElementById('result');
