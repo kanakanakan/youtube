@@ -199,8 +199,9 @@ body {
 
 .btn {
     display: inline-block;
+    width: 120px;
     padding: 10px 16px;
-    background-color: #007bff;
+    background-color: #333;
     color: white;
     border-radius: 8px;
     cursor: pointer;
@@ -211,8 +212,12 @@ body {
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
 }
 
+.button-list {
+    padding-left: 0;
+}
+
 .btn:hover {
-    background-color: #0056b3;
+    background-color: #666;
 }
 
 .btn:active {
@@ -264,6 +269,7 @@ nav {
 }
 
 #MovieId {
+    width: 500px;
     padding: 6px;
     border-radius: 5px;
     border: 1px solid #ccc;
@@ -276,17 +282,11 @@ nav {
 }
 
 #searchBtn {
-    padding: 8px 12px;
-    background-color: #28a745;
-    color: white;
-    border: none;
-    border-radius: 6px;
-    cursor: pointer;
-    font-weight: bold;
+    background-color: #333;
 }
 
 #searchBtn:hover {
-    background-color: #218838;
+    background-color: #666;
 }
 
 .search-result img {
@@ -300,7 +300,7 @@ nav {
     padding: 8px 14px;
     border: none;
     border-radius: 6px;
-    background-color: #ff9800;
+    background-color: #333;
     color: white;
     font-weight: bold;
     cursor: pointer;
@@ -308,7 +308,7 @@ nav {
 
 #shuffleStart:hover,
 #shuffleStop:hover {
-    background-color: #e68900;
+    background-color: #666;
 }
 
 /*
@@ -341,7 +341,7 @@ nav {
 }
 
 #startBtn:hover {
-    background-color: #e68900;
+    background-color: #666;
 }
 
 .slot-image {

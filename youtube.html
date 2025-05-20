@@ -14,14 +14,43 @@
 
                 <nav>
                     <ul>
+
                         <div class="control-group">
-                            <!-- <li class="btn" id="doplay">再生</li>
+                            <ul class="button-list">
+                                <li class="btn" id="doplay">
+                                    <span class="key">Space</span>
+                                    <span class="label">再生</span>
+                                </li>
+                                <li class="btn" id="dostop">
+                                    <span class="key">S</span>
+                                    <span class="label">停止</span>
+                                </li>
+                                <li class="btn" id="dopause">
+                                    <span class="key">Space</span>
+                                    <span class="label">一時停止</span>
+                                </li>
+                                <li class="btn" id="mute">
+                                    <span class="key">M</span>
+                                    <span class="label">ミュート</span>
+                                </li>
+                                <li class="btn" id="do10sNext">
+                                    <span class="key">→</span>
+                                    <span class="label">10秒先へ</span>
+                                </li>
+                                <li class="btn" id="do10sPrev">
+                                    <span class="key">←</span>
+                                    <span class="label">10秒戻る</span>
+                                </li>
+                            </ul>
+                        </div>
+                        <!-- <div class="control-group"> -->
+                        <!-- <li class="btn" id="doplay">再生</li>
                             <li class="btn" id="dostop">停止</li>
                             <li class="btn" id="dopause">一時停止</li>
                             <li class="btn" id="mute">ミュート</li>
                             <li class="btn" id="do10sNext">10秒先へ</li>
                             <li class="btn" id="do10sPrev">10秒戻る</li> -->
-                            <li class="btn" id="doplay">
+                        <!-- <li class="btn" id="doplay">
                                 <span class="key">Space</span>
                                 <span class="label">再生</span>
                             </li>
@@ -45,7 +74,7 @@
                                 <span class="key">←</span>
                                 <span class="label">10秒戻る</span>
                             </li>
-                        </div>
+                        </div> -->
                         <div class="select-group">
                             <li class="movieid-btn">
                                 <select id="MovieId" class="ytMovie" name="ytMovie">
@@ -83,9 +112,9 @@
             </div>
 
             <form id="searchForm">
-                <input type="search" id="ytSearch" placeholder="動画検索" style="width: 20%; height:10%; padding: 8px;" />
+                <input type="search" id="ytSearch" placeholder="動画検索" style="width: 30%; height:15%; padding: 8px;" />
                 <button id="searchBtn" type="submit"
-                    style="padding: 8px; width:5%; height:10%; background-color: #00a552; color: white; border: none; border-radius: 5px; cursor: pointer;">検索</button>
+                    style="padding: 8px; width:5%; height:15%; color: white; border: none; border-radius: 5px; cursor: pointer;">検索</button>
             </form>
             <div class="searchlist" style="text-align: center;">
                 <h2 id="searchHeading"></h2>
